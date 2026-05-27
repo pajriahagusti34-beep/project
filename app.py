@@ -57,15 +57,15 @@ class QueueSupermarket:
 # ==========================================
 st.set_page_config(page_title="FreshMart Express", layout="wide")
 
-# --- CUSTOM CSS: TEMA LUXURY FRESH GRADIENT & STRUK PREMIUM ---
+# --- CUSTOM CSS: TEMA GRADIENT & DESAIN STRUK PREMIUM ---
 custom_css = """
 <style>
-    /* 1. Latar Belakang Utama dengan Gradasi Estetik */
+    /* Latar Belakang Utama dengan Gradasi Estetik */
     .stApp {
         background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #f8fafc 100%) !important;
     }
     
-    /* 2. Sidebar Dibuat Kontras Tinggi & Profesional */
+    /* Sidebar Dibuat Kontras Tinggi & Profesional */
     [data-testid="stSidebar"] {
         background-color: #0f172a !important;
         border-right: 2px solid #e2e8f0 !important;
@@ -88,7 +88,7 @@ custom_css = """
         background: rgba(16, 185, 129, 0.2) !important;
     }
     
-    /* 3. Pewarnaan Teks Halaman Utama */
+    /* Pewarnaan Teks Halaman Utama */
     h1, h2, h3, h4, h5, h6, .stText {
         color: #0f172a !important;
         font-family: 'Segoe UI', Roboto, Helvetica, sans-serif !important;
@@ -98,7 +98,7 @@ custom_css = """
         color: #334155 !important;
     }
     
-    /* 4. Mempercantik Kotak Kontainer dengan Glassmorphism */
+    /* Mempercantik Kotak Kontainer dengan Glassmorphism */
     .clean-box {
         background: rgba(255, 255, 255, 0.85) !important;
         backdrop-filter: blur(8px);
@@ -110,7 +110,7 @@ custom_css = """
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05) !important;
     }
     
-    /* 5. Mengubah Tampilan Angka Statistik */
+    /* Mengubah Tampilan Angka Statistik */
     [data-testid="stMetricValue"] {
         color: #047857 !important;
         font-size: 36px !important;
@@ -123,7 +123,7 @@ custom_css = """
         letter-spacing: 0.5px;
     }
     
-    /* 6. Tombol Utama (Primary Button) */
+    /* Tombol Utama (Primary Button) */
     button[kind="primary"] {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
         color: white !important;
@@ -138,7 +138,7 @@ custom_css = """
         box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4) !important;
     }
     
-    /* 7. Input Form & Text Area */
+    /* Input Form & Text Area */
     textarea, input {
         color: #0f172a !important;
         background-color: #ffffff !important;
@@ -146,21 +146,20 @@ custom_css = """
         border-radius: 10px !important;
     }
     
-    /* 8. DESAIN STRUK KASIR PREMIUM (THERMAL RECEIPT DESIGN) */
+    /* DESAIN STRUK KASIR PREMIUM (THERMAL RECEIPT DESIGN) */
     .struk-container {
         background-color: #ffffff !important;
         color: #1e293b !important;
         font-family: 'Courier New', Courier, monospace !important;
         font-size: 14px !important;
-        line-height: 1.4 !important;
-        padding: 30px 24px;
+        line-height: 1.5 !important;
+        padding: 25px 20px;
         border-radius: 4px;
         box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.15);
-        max-width: 380px;
+        max-width: 360px;
         margin: 10px auto;
         border-top: 5px dashed #cbd5e1;
         border-bottom: 5px dashed #cbd5e1;
-        position: relative;
     }
     .struk-header {
         text-align: center;
@@ -174,13 +173,14 @@ custom_css = """
         color: #0f172a !important;
     }
     .struk-subtitle {
-        font-size: 12px !important;
+        font-size: 11px !important;
         margin: 2px 0 0 0 !important;
         color: #64748b !important;
     }
     .struk-meta {
         font-size: 13px !important;
         margin-bottom: 12px;
+        color: #334155 !important;
     }
     .struk-divider {
         border-top: 1px dashed #94a3b8;
@@ -189,29 +189,25 @@ custom_css = """
     .struk-item-row {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 4px;
+        margin-bottom: 5px;
     }
     .struk-item-name {
         flex: 1;
         text-align: left;
         padding-right: 10px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .struk-item-price {
         text-align: right;
         font-weight: bold;
     }
     .struk-total-section {
-        margin-top: 12px;
+        margin-top: 10px;
     }
     .struk-footer {
         text-align: center;
         margin-top: 20px;
         font-size: 12px !important;
         color: #64748b !important;
-        font-style: italic;
     }
 </style>
 """
@@ -427,7 +423,7 @@ else:
                         kembalian_final = uang_bayar - pelanggan_depan.total_harga
                         no_transaksi = f"TRX-{random.randint(10000, 99999)}"
                         
-                        # --- GENERATE STRUK HTML PREMIUM (FLEKSIBEL & RAPI) ---
+                        # --- GENERATE STRUK HTML STRUKTUR PREMIUM ---
                         html_items = ""
                         for b in pelanggan_depan.list_belanjaan:
                             harga = st.session_state.database_produk[b]
@@ -445,15 +441,15 @@ else:
                                 <p class="struk-subtitle">Sistem Antrean Kasir FIFO</p>
                             </div>
                             <div class="struk-meta">
-                                <div>No. Trans : {no_transaksi}</div>
-                                <div>Pelanggan : {pelanggan_depan.nama}</div>
-                                <div>Kasir     : Admin Aktif</div>
+                                <div><b>No. Trans</b> : {no_transaksi}</div>
+                                <div><b>Pelanggan</b>: {pelanggan_depan.nama}</div>
+                                <div><b>Kasir</b>     : Admin Aktif</div>
                             </div>
                             <div class="struk-divider"></div>
                             {html_items}
                             <div class="struk-divider"></div>
                             <div class="struk-total-section">
-                                <div class="struk-item-row" style="font-weight: bold;">
+                                <div class="struk-item-row" style="font-weight: bold; font-size: 15px;">
                                     <span>TOTAL</span>
                                     <span>Rp {pelanggan_depan.total_harga:,}</span>
                                 </div>
@@ -468,11 +464,12 @@ else:
                             </div>
                             <div class="struk-divider"></div>
                             <div class="struk-footer">
-                                Terima Kasih Atas Kunjungan Anda!
+                                ~ Terima Kasih Atas Kunjungan Anda ~
                             </div>
                         </div>
                         """
                         
+                        # Menyimpan template HTML ke session state
                         st.session_state.struk_terakhir = template_html_struk
                         
                         dilayani = st.session_state.antrean_kasir.layani_pelanggan()
@@ -484,7 +481,7 @@ else:
         with col_kanan:
             st.markdown("### 📄 Nota Transaksi Terakhir")
             if st.session_state.struk_terakhir:
-                # Menampilkan struk menggunakan HTML murni agar style CSS bekerja sempurna
+                # DI SINI LETAK PERBAIKANNYA: Wajib menggunakan unsafe_allow_html=True
                 st.markdown(st.session_state.struk_terakhir, unsafe_allow_html=True)
             else:
                 st.caption("Belum ada struk transaksi yang dicetak di sesi ini.")
