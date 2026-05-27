@@ -57,7 +57,7 @@ class QueueSupermarket:
 # ==========================================
 st.set_page_config(page_title="FreshMart Express", layout="wide")
 
-# --- CUSTOM CSS: TEMA LUXURY FRESH GRADIENT ---
+# --- CUSTOM CSS: TEMA LUXURY FRESH GRADIENT & STRUK PREMIUM ---
 custom_css = """
 <style>
     /* 1. Latar Belakang Utama dengan Gradasi Estetik */
@@ -146,26 +146,72 @@ custom_css = """
         border-radius: 10px !important;
     }
     
-    /* 8. Desain Nota / Struk Kasir Estetik */
+    /* 8. DESAIN STRUK KASIR PREMIUM (THERMAL RECEIPT DESIGN) */
     .struk-container {
-        background-color: #fffdf0 !important;
-        color: #111111 !important;
+        background-color: #ffffff !important;
+        color: #1e293b !important;
         font-family: 'Courier New', Courier, monospace !important;
-        padding: 25px;
-        border-radius: 8px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        margin: 15px auto;
-        border: 2px dashed #a7f3d0;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+        padding: 30px 24px;
+        border-radius: 4px;
+        box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.15);
+        max-width: 380px;
+        margin: 10px auto;
+        border-top: 5px dashed #cbd5e1;
+        border-bottom: 5px dashed #cbd5e1;
+        position: relative;
     }
-    .struk-container pre {
-        background-color: transparent !important;
-        color: #111111 !important;
-        border: none !important;
-        padding: 0 !important;
+    .struk-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .struk-title {
+        font-size: 18px !important;
+        font-weight: bold !important;
+        letter-spacing: 1px;
         margin: 0 !important;
-        font-family: 'Courier New', Courier, monospace !important;
-        white-space: pre-wrap !important;
+        color: #0f172a !important;
+    }
+    .struk-subtitle {
+        font-size: 12px !important;
+        margin: 2px 0 0 0 !important;
+        color: #64748b !important;
+    }
+    .struk-meta {
+        font-size: 13px !important;
+        margin-bottom: 12px;
+    }
+    .struk-divider {
+        border-top: 1px dashed #94a3b8;
+        margin: 8px 0;
+    }
+    .struk-item-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+    }
+    .struk-item-name {
+        flex: 1;
+        text-align: left;
+        padding-right: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .struk-item-price {
+        text-align: right;
+        font-weight: bold;
+    }
+    .struk-total-section {
+        margin-top: 12px;
+    }
+    .struk-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 12px !important;
+        color: #64748b !important;
+        font-style: italic;
     }
 </style>
 """
@@ -379,32 +425,55 @@ else:
                         st.error("Transaksi ditolak. Harap masukkan jumlah uang tunai yang cukup.")
                     else:
                         kembalian_final = uang_bayar - pelanggan_depan.total_harga
-                        
-                        # --- PROSES MEMBUAT TEMPLATE STRUK FISIK KASIR ---
                         no_transaksi = f"TRX-{random.randint(10000, 99999)}"
-                        item_struk = ""
+                        
+                        # --- GENERATE STRUK HTML PREMIUM (FLEKSIBEL & RAPI) ---
+                        html_items = ""
                         for b in pelanggan_depan.list_belanjaan:
                             harga = st.session_state.database_produk[b]
-                            item_struk += f"{b:<24} Rp{harga:>8,}\n"
+                            html_items += f"""
+                            <div class="struk-item-row">
+                                <span class="struk-item-name">{b}</span>
+                                <span class="struk-item-price">Rp {harga:,}</span>
+                            </div>
+                            """
                         
-                        template_struk = f"""
-========================================
-           FRESHMART EXPRESS            
-        Sistem Antrean Kasir FIFO       
-========================================
-No. Trans : {no_transaksi}
-Pelanggan : {pelanggan_depan.nama}
-Kasir     : Admin Aktif
-----------------------------------------
-{item_struk}----------------------------------------
-TOTAL             : Rp{pelanggan_depan.total_harga:>8,}
-TUNAI/CASH        : Rp{uang_bayar:>8,}
-KEMBALIAN         : Rp{kembalian_final:>8,}
-----------------------------------------
-  Terima Kasih Atas Kunjungan Anda!   
-========================================
-"""
-                        st.session_state.struk_terakhir = template_struk
+                        template_html_struk = f"""
+                        <div class="struk-container">
+                            <div class="struk-header">
+                                <h3 class="struk-title">FRESHMART EXPRESS</h3>
+                                <p class="struk-subtitle">Sistem Antrean Kasir FIFO</p>
+                            </div>
+                            <div class="struk-meta">
+                                <div>No. Trans : {no_transaksi}</div>
+                                <div>Pelanggan : {pelanggan_depan.nama}</div>
+                                <div>Kasir     : Admin Aktif</div>
+                            </div>
+                            <div class="struk-divider"></div>
+                            {html_items}
+                            <div class="struk-divider"></div>
+                            <div class="struk-total-section">
+                                <div class="struk-item-row" style="font-weight: bold;">
+                                    <span>TOTAL</span>
+                                    <span>Rp {pelanggan_depan.total_harga:,}</span>
+                                </div>
+                                <div class="struk-item-row">
+                                    <span>TUNAI/CASH</span>
+                                    <span>Rp {uang_bayar:,}</span>
+                                </div>
+                                <div class="struk-item-row" style="color: #047857; font-weight: bold;">
+                                    <span>KEMBALIAN</span>
+                                    <span>Rp {kembalian_final:,}</span>
+                                </div>
+                            </div>
+                            <div class="struk-divider"></div>
+                            <div class="struk-footer">
+                                Terima Kasih Atas Kunjungan Anda!
+                            </div>
+                        </div>
+                        """
+                        
+                        st.session_state.struk_terakhir = template_html_struk
                         
                         dilayani = st.session_state.antrean_kasir.layani_pelanggan()
                         if dilayani:
@@ -415,11 +484,8 @@ KEMBALIAN         : Rp{kembalian_final:>8,}
         with col_kanan:
             st.markdown("### 📄 Nota Transaksi Terakhir")
             if st.session_state.struk_terakhir:
-                st.markdown(f"""
-                <div class="struk-container">
-                    <pre>{st.session_state.struk_terakhir}</pre>
-                </div>
-                """, unsafe_allow_html=True)
+                # Menampilkan struk menggunakan HTML murni agar style CSS bekerja sempurna
+                st.markdown(st.session_state.struk_terakhir, unsafe_allow_html=True)
             else:
                 st.caption("Belum ada struk transaksi yang dicetak di sesi ini.")
 
