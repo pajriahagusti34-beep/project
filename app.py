@@ -57,51 +57,51 @@ class QueueSupermarket:
 # ==========================================
 st.set_page_config(page_title="FreshMart Express", layout="wide")
 
-# --- FORCED LIGHT THEME & CUSTOM CSS (PERBAIKAN TOTAL TABRAKAN WARNA) ---
+# --- CUSTOM CSS: TEMA LUXURY FRESH GRADIENT ---
 custom_css = """
 <style>
-    /* Paksa Background Utama & Teks Halaman Menjadi Terang Kontras */
+    /* 1. Latar Belakang Utama dengan Gradasi Estetik */
     .stApp {
         background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #f8fafc 100%) !important;
-        color: #0f172a !important;
     }
     
-    /* Perbaikan Teks Judul dan Paragraf Utama */
-    h1, h2, h3, h4, h5, h6, p, span, label, .stText {
-        color: #0f172a !important;
-        font-family: 'Segoe UI', Roboto, Helvetica, sans-serif !important;
-    }
-    h1, h2, h3 {
-        font-weight: 700 !important;
-    }
-    
-    /* Paksa Sidebar Menjadi Gelap Keren (Midnight Navy) */
-    [data-testid="stSidebar"], [data-testid="stSidebar"] > div {
+    /* 2. Sidebar Dibuat Kontras Tinggi & Profesional */
+    [data-testid="stSidebar"] {
         background-color: #0f172a !important;
         border-right: 2px solid #e2e8f0 !important;
     }
     
-    /* Teks di dalam Sidebar Wajib Putih */
-    [data-testid="stSidebar"] h3, 
-    [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] label,
-    [data-testid="stSidebar"] .stMarkdown p {
-        color: #ffffff !important;
+    /* Teks di Dalam Sidebar Jadi Putih Cerah */
+    [data-testid="stSidebar"] h3, [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
+        color: #f8fafc !important;
     }
     
-    /* Gaya Radio Button Menu Navigasi di Sidebar */
+    /* Radio Button Menu di Sidebar saat Aktif */
     [data-testid="stSidebar"] div[role="radiogroup"] label {
-        background: rgba(255, 255, 255, 0.05) !important;
-        padding: 8px 12px !important;
-        border-radius: 8px !important;
-        margin-bottom: 6px !important;
-        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 8px 12px;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+    [data-testid="stSidebar"] div[role="radiogroup"] label:hover {
+        background: rgba(16, 185, 129, 0.2) !important;
     }
     
-    /* Kotak Kontainer Utama (Clean Box) */
+    /* 3. Pewarnaan Teks Halaman Utama */
+    h1, h2, h3, h4, h5, h6, .stText {
+        color: #0f172a !important;
+        font-family: 'Segoe UI', Roboto, Helvetica, sans-serif !important;
+        font-weight: 700 !important;
+    }
+    p, span, div {
+        color: #334155 !important;
+    }
+    
+    /* 4. Mempercantik Kotak Kontainer dengan Glassmorphism */
     .clean-box {
-        background: #ffffff !important;
+        background: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(8px);
         border: 1px solid rgba(16, 185, 129, 0.2) !important;
         border-left: 6px solid #10b981 !important;
         border-radius: 16px !important;
@@ -109,11 +109,8 @@ custom_css = """
         margin-bottom: 20px !important;
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05) !important;
     }
-    .clean-box p, .clean-box b {
-        color: #1e293b !important;
-    }
     
-    /* Mengubah Angka Statistik (Metric) */
+    /* 5. Mengubah Tampilan Angka Statistik */
     [data-testid="stMetricValue"] {
         color: #047857 !important;
         font-size: 36px !important;
@@ -122,9 +119,11 @@ custom_css = """
     [data-testid="stMetricLabel"] p {
         color: #475569 !important;
         font-weight: 600 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
-    /* Tombol Utama (Primary Button) */
+    /* 6. Tombol Utama (Primary Button) */
     button[kind="primary"] {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
         color: white !important;
@@ -132,16 +131,22 @@ custom_css = """
         border-radius: 10px !important;
         font-weight: 600 !important;
         box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3) !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+    button[kind="primary"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4) !important;
     }
     
-    /* Input Form & Text Area */
-    textarea, input, [data-baseweb="select"] {
+    /* 7. Input Form & Text Area */
+    textarea, input {
         color: #0f172a !important;
         background-color: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
+        border-radius: 10px !important;
     }
     
-    /* Desain Nota / Struk Kasir */
+    /* 8. Desain Nota / Struk Kasir Estetik */
     .struk-container {
         background-color: #fffdf0 !important;
         color: #111111 !important;
@@ -156,6 +161,9 @@ custom_css = """
     .struk-container pre {
         background-color: transparent !important;
         color: #111111 !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
         font-family: 'Courier New', Courier, monospace !important;
         white-space: pre-wrap !important;
     }
@@ -210,7 +218,7 @@ if not st.session_state.is_logged_in:
         st.markdown('<div style="text-align:center; margin-top:60px; margin-bottom:20px;">', unsafe_allow_html=True)
         logo_url = "https://global.ac.id/wp-content/uploads/2021/01/logo-global-80.png"
         st.image(logo_url, width=130)
-        st.markdown('<h1 style="font-size: 28px; font-weight: 600; letter-spacing: 1px; margin-top:15px; color:#0f172a;">FreshMart Express</h1>', unsafe_allow_html=True)
+        st.markdown('<h1 style="font-size: 28px; font-weight: 600; letter-spacing: 1px; margin-top:15px;">FreshMart Express</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color: #475569; font-size: 13px;">Sistem Informasi Manajemen Antrean Kasir</p>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
@@ -231,7 +239,7 @@ if not st.session_state.is_logged_in:
 # HALAMAN 2: DASHBOARD UTAMA
 # ==========================================
 else:
-    st.sidebar.markdown("<h3 style='letter-spacing: 1px; font-weight:600; margin-bottom:0; color:#ffffff;'>FreshMart Express</h3>", unsafe_allow_html=True)
+    st.sidebar.markdown("<h3 style='letter-spacing: 1px; font-weight:600; margin-bottom:0;'>FreshMart Express</h3>", unsafe_allow_html=True)
     st.sidebar.markdown("<p style='color:#cbd5e1; font-size:12px; margin-top:0;'>Otoritas Kasir: Active</p>", unsafe_allow_html=True)
     st.sidebar.markdown("---")
     
@@ -282,7 +290,7 @@ else:
             st.markdown(f"""
             <div class="clean-box" style="border-left: 6px solid #10b981 !important; background: rgba(16, 185, 129, 0.05) !important; border-color: rgba(16, 185, 129, 0.3) !important;">
                 <p style="margin: 0; font-size: 13px; color: #10b981; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Sedang Diproses Terdepan</p>
-                <h4 style="margin: 5px 0 10px 0; font-size: 22px; color: #0f172a;">{pelanggan_sekarang.nama}</h4>
+                <h4 style="margin: 5px 0 10px 0; font-size: 22px;">{pelanggan_sekarang.nama}</h4>
                 <p style="margin: 0; color: #334155; font-size: 14px;">Membawa <b>{len(pelanggan_sekarang.list_belanjaan)} item</b> dengan akumulasi nilai belanja sebesar <b>Rp {pelanggan_sekarang.total_harga:,}</b>.</p>
             </div>
             """, unsafe_allow_html=True)
