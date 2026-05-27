@@ -57,57 +57,83 @@ class QueueSupermarket:
 # ==========================================
 st.set_page_config(page_title="FreshMart Express", layout="wide")
 
-# --- CUSTOM CSS: KONTRAS, ELEGAN & RAMAH MATA ---
+# --- CUSTOM CSS: TEMA MODERN LIGHT & FRESH (ELEGANT RETAIL) ---
 custom_css = """
 <style>
+    /* Background Utama Aplikasi */
     .stApp {
-        background-color: #0b0f17 !important;
+        background-color: #f8fafc !important;
     }
-    h1, h2, h3, h4, h5, h6, p, span, label, li, div, .stText {
-        color: #f1f5f9 !important;
-        font-family: 'Segoe UI', Arial, sans-serif !important;
+    
+    /* Pewarnaan Teks Global agar Kontras dengan Background Terang */
+    h1, h2, h3, h4, h5, h6, p, span, div, .stText {
+        color: #1e293b !important;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
+    
+    /* Label Input & Widget Form */
     [data-testid="stWidgetLabel"] p {
-        color: #cbd5e1 !important;
+        color: #475569 !important;
+        font-weight: 600 !important;
     }
+    
+    /* Desain Sidebar Kiri */
     [data-testid="stSidebar"] {
-        background-color: #06090e !important;
-        border-right: 1px solid #1e293b !important;
+        background-color: #ffffff !important;
+        border-right: 1px solid #e2e8f0 !important;
     }
     [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
-        color: #f1f5f9 !important;
+        color: #334155 !important;
     }
+    
+    /* Desain Kotak Kontainer (Clean Box) Menjadi Lebih Elegan */
     .clean-box {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(56, 189, 248, 0.3) !important;
-        border-left: 6px solid #38bdf8 !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-left: 6px solid #10b981 !important; /* Aksen Hijau FreshMart */
         border-radius: 12px !important;
         padding: 24px !important;
         margin-bottom: 20px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
     }
-    textarea {
-        color: #f1f5f9 !important;
-        background-color: #111827 !important;
+    
+    /* Input Text Area & Form Control */
+    textarea, input {
+        color: #0f172a !important;
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
     }
+    
+    /* Warna Angka Statik (Metric Widget) */
     [data-testid="stMetricValue"] {
-        color: #38bdf8 !important;
+        color: #0f766e !important; /* Warna Teal Elegan */
+        font-weight: bold !important;
+    }
+    [data-testid="stMetricLabel"] p {
+        color: #64748b !important;
+    }
+    
+    /* Style Khusus untuk Text Jurnal Berwarna Hijau */
+    .clean-box p {
+        color: #1e293b !important;
     }
     
     /* --- STYLE KHUSUS UNTUK STRUK NOTA KASIR --- */
     .struk-container {
-        background-color: #ffffff !important;
-        color: #000000 !important;
+        background-color: #fffde7 !important; /* Warna kertas nota sedikit krem estetik */
+        color: #111111 !important;
         font-family: 'Courier New', Courier, monospace !important;
         padding: 20px;
-        border-radius: 4px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        border-radius: 6px;
+        box-sizing: border-box;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         max-width: 400px;
         margin: 15px auto;
-        border: 1px solid #ddd;
+        border: 1px dashed #bcccb4;
     }
     .struk-container pre {
         background-color: transparent !important;
-        color: #000000 !important;
+        color: #111111 !important;
         border: none !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -238,7 +264,7 @@ else:
             <div class="clean-box" style="border-left: 6px solid #10b981 !important; background: rgba(16, 185, 129, 0.05) !important; border-color: rgba(16, 185, 129, 0.3) !important;">
                 <p style="margin: 0; font-size: 13px; color: #10b981; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Sedang Diproses Terdepan</p>
                 <h4 style="margin: 5px 0 10px 0; font-size: 22px;">{pelanggan_sekarang.nama}</h4>
-                <p style="margin: 0; color: #cbd5e1; font-size: 14px;">Membawa <b>{len(pelanggan_sekarang.list_belanjaan)} item</b> dengan akumulasi nilai belanja sebesar <b>Rp {pelanggan_sekarang.total_harga:,}</b>.</p>
+                <p style="margin: 0; color: #334155; font-size: 14px;">Membawa <b>{len(pelanggan_sekarang.list_belanjaan)} item</b> dengan akumulasi nilai belanja sebesar <b>Rp {pelanggan_sekarang.total_harga:,}</b>.</p>
             </div>
             """, unsafe_allow_html=True)
 
@@ -303,7 +329,7 @@ else:
                 st.write(f"Pelanggan Terdepan: **{pelanggan_depan.nama}**")
                 st.write("Daftar belanjaan yang dibawa:")
                 
-                st.markdown('<div class="clean-box" style="background-color: #1f2937 !important;">', unsafe_allow_html=True)
+                st.markdown('<div class="clean-box" style="background-color: #f1f5f9 !important; border-left-color: #0f766e !important;">', unsafe_allow_html=True)
                 for b in pelanggan_depan.list_belanjaan:
                     st.write(f"- {b} (Rp {st.session_state.database_produk[b]:,})")
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -382,5 +408,5 @@ KEMBALIAN         : Rp{kembalian_final:>8,}
         else:
             st.markdown('<div class="clean-box">', unsafe_allow_html=True)
             for item in st.session_state.riwayat_transaksi:
-                st.markdown(f"<p style='color: #10b981 !important;'>✓ {item}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='color: #10b981 !important; font-weight: 500;'>✓ {item}</p>", unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
