@@ -48,7 +48,7 @@ class QueueSupermarket:
         while sekarang:
             jumlah_item = len(sekarang.list_belanjaan)
             hasil += f"[{nomor}] {sekarang.nama} ({jumlah_item} Item Barang)\n"
-            sekarang = Clinical_node = sekarang.next
+            sekarang = sekarang.next
             nomor += 1
         return hasil
 
@@ -57,7 +57,7 @@ class QueueSupermarket:
 # ==========================================
 st.set_page_config(page_title="FreshMart Express", layout="wide")
 
-# --- ULTRA PREMIUM UI CUSTOM CSS WITH ADVANCED SIDEBAR NAVIGATION ---
+# --- ULTRA PREMIUM UI CUSTOM CSS ---
 custom_css = """
 <style>
     .stApp {
@@ -103,9 +103,6 @@ custom_css = """
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
     }
 
-    [data-testid="stSidebar"] div[role="radiogroup"] label div[data-testid="stMarkdownContainer"] p::before {
-        content: "";
-    }
     [data-testid="stSidebar"] div[role="radiogroup"] [data-testid="stWidgetRadioDot"] {
         display: none !important;
     }
@@ -148,18 +145,6 @@ custom_css = """
         border: 1px solid rgba(13, 148, 136, 0.15) !important;
         border-top: 4px solid #0d9488 !important;
     }
-    [data-testid="stMetricValue"] {
-        color: #0d9488 !important;
-        font-size: 40px !important;
-        font-weight: 800 !important;
-    }
-    [data-testid="stMetricLabel"] p {
-        color: #475569 !important;
-        font-weight: 600 !important;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        font-size: 12px !important;
-    }
     
     button[kind="primary"] {
         background: linear-gradient(135deg, #0d9488 0%, #115e59 100%) !important;
@@ -170,35 +155,18 @@ custom_css = """
         box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3) !important;
         transition: all 0.3s ease !important;
     }
-    button[kind="primary"]:hover {
-        transform: translateY(-2px) scale(1.01);
-        box-shadow: 0 12px 20px rgba(13, 148, 136, 0.4) !important;
-    }
 
     button[kind="secondary"] {
         background: rgba(239, 68, 68, 0.1) !important;
         color: #ef4444 !important;
         border: 1px solid rgba(239, 68, 68, 0.2) !important;
         border-radius: 12px !important;
-        transition: all 0.2s ease !important;
-    }
-    button[kind="secondary"]:hover {
-        background: #ef4444 !important;
-        color: white !important;
-    }
-    
-    textarea, input {
-        color: #0f172a !important;
-        background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 12px !important;
-        padding: 10px !important;
     }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-# CSS KHUSUS UNTUK STRUK KASIR (DIMASUKKAN DALAM IFRAME)
+# CSS STRUK KASIR
 html_struk_style = """
 <style>
     .struk-container {
@@ -227,7 +195,7 @@ html_struk_style = """
 </style>
 """
 
-# --- INITIALIZATION TRANSAKSI ---
+# --- INITIALIZATION ---
 if 'antrean_kasir' not in st.session_state:
     st.session_state.antrean_kasir = QueueSupermarket()
 if 'is_logged_in' not in st.session_state:
@@ -252,7 +220,7 @@ if 'database_produk' not in st.session_state:
 antrean = st.session_state.antrean_kasir
 
 # ==========================================
-# HALAMAN 1: LOGIN PAGE
+# LOGIN JALUR
 # ==========================================
 if not st.session_state.is_logged_in:
     _, col_m, _ = st.columns([1, 1.2, 1])
@@ -262,7 +230,6 @@ if not st.session_state.is_logged_in:
         st.markdown('<h4 style="margin-top:0; margin-bottom:15px; font-size:16px; color:#0f172a;">Otorisasi Akses Pegawai</h4>', unsafe_allow_html=True)
         username = st.text_input("Username Kasir:")
         password = st.text_input("Password Pengaman:", type="password")
-        st.markdown('<div style="margin-top:15px;"></div>', unsafe_allow_html=True)
         if st.button("Buka Akses Sistem", type="primary", use_container_width=True):
             if username == "admin" and password == "123":
                 st.session_state.is_logged_in = True
@@ -272,7 +239,7 @@ if not st.session_state.is_logged_in:
         st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
-# HALAMAN 2: OPERASIONAL UTAMA
+# OPERASIONAL UTAMA
 # ==========================================
 else:
     st.sidebar.markdown("<h2 style='background:linear-gradient(45deg, #10b981, #38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:22px; font-weight:800; margin-bottom:5px; margin-top:15px;'>FreshMart UI v2.5</h2>", unsafe_allow_html=True)
@@ -296,25 +263,21 @@ else:
         st.session_state.is_logged_in = False
         st.rerun()
 
-    # --- JALUR MENU 1 ---
+    # --- MENU 1 ---
     if menu == "📢 1. Panggil Nomor Antrean":
         st.markdown('<h1>📊 Statistik & Dasbor Utama</h1>', unsafe_allow_html=True)
-        st.markdown('<p style="color:#475569; margin-top:-10px; font-weight:500;">Ringkasan aktivitas transaksi supermarket Anda hari ini</p>', unsafe_allow_html=True)
-        
         panjang_antrean = 0
         curr = antrean.head
         while curr:
             panjang_antrean += 1
             curr = curr.next
             
-        st.markdown('<div style="margin-top:20px;"></div>', unsafe_allow_html=True)
         col_m1, col_m2 = st.columns(2)
         with col_m1:
             st.metric(label="Pelanggan Menunggu Antrean", value=f"{panjang_antrean} Jiwa")
         with col_m2:
             st.metric(label="Total Sukses Dilayani", value=f"{antrean.total_pelanggan_dilayani} Orang")
             
-        st.markdown('<div style="margin-top:25px;"></div>', unsafe_allow_html=True)
         st.markdown('<h3>📢 Pelanggan di Garis Depan Kasir</h3>', unsafe_allow_html=True)
         if antrean.is_empty():
             st.info("Kondisi Jalur Kasir Aman. Tidak ada antrean standby.")
@@ -323,12 +286,12 @@ else:
             st.markdown(f"""
             <div class="clean-box">
                 <p style="margin:0; font-size:12px; color:#0d9488; font-weight:bold; text-transform:uppercase;">Sedang Melakukan Scan Barang</p>
-                <h3 style="margin:5px 0 10px 0; font-size:24px; background:none; -webkit-text-fill-color:initial; color:#0f172a !important;">{p_depan.nama}</h3>
+                <h3 style="margin:5px 0 10px 0; font-size:24px; color:#0f172a !important; background:none; -webkit-text-fill-color:initial;">{p_depan.nama}</h3>
                 <p style="margin:0; font-size:14px; color:#475569;">Membawa total belanjaan sebanyak <b>{len(p_depan.list_belanjaan)} jenis barang</b> dengan estimasi tagihan <b>Rp {p_depan.total_harga:,}</b>.</p>
             </div>
             """, unsafe_allow_html=True)
 
-    # --- JALUR MENU 2 ---
+    # --- MENU 2 ---
     elif menu == "📦 2. Cek Katalog Produk Toko":
         st.markdown('<h1>📋 Katalog Produk Terdaftar</h1>', unsafe_allow_html=True)
         st.markdown('<div class="clean-box">', unsafe_allow_html=True)
@@ -336,64 +299,52 @@ else:
             st.markdown(f"<div style='display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;'><span style='font-weight:600; color:#1e293b;'>📦 {k}</span><span style='font-weight:700; color:#0d9488;'>Rp {v:,}</span></div>", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- JALUR MENU 3 ---
+    # --- MENU 3 ---
     elif menu == "🔍 3. Monitor Sabuk Antrean RAM":
         st.markdown('<h1>🔍 Visualisasi Memori Node (Queue)</h1>', unsafe_allow_html=True)
-        st.markdown('<p style="color:#475569; margin-top:-10px; font-weight:500;">Status urutan objek antrean FIFO murni di dalam RAM komputer</p>', unsafe_allow_html=True)
         clean_antrean = antrean.dapatkan_antrean_string()
         st.text_area("Urutan Barisan Pelanggan (Head -> Tail):", value=clean_antrean, height=250, disabled=True)
 
-    # --- JALUR MENU 4 ---
+    # --- MENU 4 ---
     elif menu == "📥 4. Input Pelanggan ke Jalur":
         st.markdown('<h1>📥 Registrasi Masuk Antrean</h1>', unsafe_allow_html=True)
         with st.form("form_tambah_baru"):
-            st.markdown('<div style="padding:5px;"></div>', unsafe_allow_html=True)
             nama_input = st.text_input("Input Nama Pelanggan Baru:")
             pilihan_barang = st.multiselect("Pilih Item Belanjaan yang Dibawa:", options=list(st.session_state.database_produk.keys()))
-            st.markdown('<div style="margin-top:15px;"></div>', unsafe_allow_html=True)
             if st.form_submit_button("Dorong Masuk Barisan Antrean"):
                 if nama_input.strip() and pilihan_barang:
                     total = sum(st.session_state.database_produk[i] for i in pilihan_barang)
                     antrean.tambah_pelanggan(nama_input, pilihan_barang, total)
-                    st.success(f"Sukses! Node '{nama_input}' dimasukkan di urutan paling belakang (Tail).")
+                    st.success(f"Sukses! Node '{nama_input}' dimasukkan di urutan paling belakang.")
                     st.rerun()
                 else:
                     st.error("Gagal! Nama dan barang tidak boleh kosong.")
 
-    # --- JALUR MENU 5 ---
+    # --- MENU 5 ---
     elif menu == "💸 5. Scan Barang & Input Bayar":
         st.markdown('<h1>💸 Meja Penyelesaian Pembayaran</h1>', unsafe_allow_html=True)
-        
         if antrean.is_empty():
             st.info("Meja kasir siap. Tidak ada antrean pelanggan yang menunggu.")
         else:
             pelanggan_depan = antrean.head
             st.markdown(f"### Pembayaran Atas Nama: `{pelanggan_depan.nama}`")
-            
             st.markdown('<div class="clean-box">', unsafe_allow_html=True)
-            st.markdown('<p style="margin-top:0; font-weight:700; color:#334155;">Daftar Item Keranjang:</p>', unsafe_allow_html=True)
             for b in pelanggan_depan.list_belanjaan:
-                st.markdown(f"<div style='font-size:14px; margin-bottom:4px; color:#475569;'>• {b} (<span style='font-weight:600;'>Rp {st.session_state.database_produk[b]:,}</span>)</div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='font-size:14px; margin-bottom:4px; color:#475569;'>• {b} (Rp {st.session_state.database_produk[b]:,})</div>", unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
-            st.markdown(f"<h2 style='background:none; -webkit-text-fill-color:initial; color:#0f172a;'>Total Tagihan: <span style='color:#0d9488;'>Rp {pelanggan_depan.total_harga:,}</span></h2>", unsafe_allow_html=True)
+            st.markdown(f"<h2>Total Tagihan: <span style='color:#0d9488;'>Rp {pelanggan_depan.total_harga:,}</span></h2>", unsafe_allow_html=True)
             uang_bayar = st.number_input("Masukkan Jumlah Nominal Uang Tunai (Rp):", min_value=0, step=1000)
             
-            st.markdown('<div style="margin-top:15px;"></div>', unsafe_allow_html=True)
             if st.button("Finalisasi Pembayaran & Cetak Nota", type="primary", use_container_width=True):
                 if uang_bayar < pelanggan_depan.total_harga:
                     st.error("Transaksi Ditolak! Nominal uang tunai yang diberikan kurang.")
                 else:
                     kembalian = uang_bayar - pelanggan_depan.total_harga
                     no_transaksi = f"TRX-{random.randint(10000, 99999)}"
-                    
                     html_items = ""
                     for b in pelanggan_depan.list_belanjaan:
-                        html_items += f"""
-                        <div class="struk-item-row">
-                            <span class="struk-item-name">{b}</span>
-                            <span class="struk-item-price">Rp {st.session_state.database_produk[b]:,}</span>
-                        </div>"""
+                        html_items += f'<div class="struk-item-row"><span class="struk-item-name">{b}</span><span class="struk-item-price">Rp {st.session_state.database_produk[b]:,}</span></div>'
                     
                     st.session_state.struk_terakhir = f"""
                     {html_struk_style}
@@ -426,42 +377,34 @@ else:
                     st.session_state.total_omset += pelanggan_depan.total_harga
                     dilayani = antrean.layani_pelanggan()
                     if dilayani:
-                        st.session_state.riwayat_transaksi.append(f"Sukses: {dilayani.nama} - Total Belanja: Rp {dilayani.total_harga:,} (Lunas)")
-                    
+                        st.session_state.riwayat_transaksi.append(f"Sukses: {dilayani.nama} - Total: Rp {dilayani.total_harga:,}")
                     st.balloons()
-                    st.success("Pembayaran Berhasil! Silakan cek Menu 6 untuk melihat Struk Terbuka.")
+                    st.success("Pembayaran Berhasil! Silakan cek Menu 6.")
 
-    # --- JALUR MENU 6 ---
+    # --- MENU 6 ---
     elif menu == "🧾 6. Cetak Struk & Jurnal Rekap":
         st.markdown('<h1>🧾 Dokumen Struk & Jurnal Rekapitulasi</h1>', unsafe_allow_html=True)
-        st.markdown('<p style="color:#475569; margin-top:-10px; font-weight:500;">Monitor arus kas masuk dan validasi nota digital kasir</p>', unsafe_allow_html=True)
-        
         st.markdown(f"""
-        <div style="background: linear-gradient(90deg, #0f172a 0%, #0d9488 100%); padding: 18px 25px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(13,148,136,0.25);">
-            <div style="font-size: 11px; font-weight: 700; color: #ccfbf1; text-transform: uppercase; letter-spacing: 1px;">LIVE FINANCIAL TRACKER (SHIFT AKTIF)</div>
+        <div style="background: linear-gradient(90deg, #0f172a 0%, #0d9488 100%); padding: 18px 25px; border-radius: 16px; margin-bottom: 25px;">
+            <div style="font-size: 11px; font-weight: 700; color: #ccfbf1; text-transform: uppercase;">LIVE FINANCIAL TRACKER</div>
             <div style="font-size: 28px; font-weight: 800; color: #ffffff; margin-top: 2px;">Total Arus Pendapatan: <span style="color: #2dd4bf;">Rp {st.session_state.total_omset:,}</span></div>
         </div>
         """, unsafe_allow_html=True)
         
         col_struk, col_jurnal = st.columns([1, 1.2])
-        
         with col_struk:
             st.markdown("### 📄 Struk Pembayaran Terakhir")
             if st.session_state.struk_terakhir:
                 st.components.v1.html(st.session_state.struk_terakhir, height=520, scrolling=True)
             else:
-                st.markdown("""
-                <div class="empty-graveyard-box">
-                    <div style="font-size: 50px; margin-bottom: 10px;">📭</div>
-                    <h4 style="margin: 0; font-size: 16px; color: #475569; background:none; -webkit-text-fill-color:initial;">Printer Nota Standby</h4>
-                    <p style="margin: 5px 0 0 0; font-size: 13px; color: #94a3b8; line-height:1.4;">Belum ada antrean yang di-checkout pada menu nomor 5.<br>Sistem printer thermal siap mencetak!</p>
-                </div>
-                """, unsafe_allow_html=True)
+                st.markdown('<div class="empty-graveyard-box"><h4>Printer Nota Standby</h4><p>Belum ada transaksi.</p></div>', unsafe_allow_html=True)
                 
         with col_jurnal:
-            st.markdown("### 📋 Log Riwayat Transaksi (RAM)")
+            st.markdown("### 📋 Log Riwayat Transaksi")
             if not st.session_state.riwayat_transaksi:
-                st.markdown("""
-                <div class="empty-graveyard-box">
-                    <div style="font-size: 50px; margin-bottom: 10px;">📉</div>
-                    <h4
+                st.markdown('<div class="empty-graveyard-box"><h4>Jurnal Kas Bersih</h4><p>Belum ada data rekap log.</p></div>', unsafe_allow_html=True)
+            else:
+                st.markdown('<div class="clean-box">', unsafe_allow_html=True)
+                for r in st.session_state.riwayat_transaksi:
+                    st.markdown(f"<p style='color:#0d9488; font-weight:600;'>✓ {r}</p>", unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
