@@ -53,11 +53,11 @@ class QueueSupermarket:
         return hasil
 
 # ==========================================
-# PROGRAM UTAMA (STREAMLIT UI EXCLUSIVE THEME)
+# PROGRAM UTAMA (STREAMLIT UI LUXURY THEME)
 # ==========================================
 st.set_page_config(page_title="FreshMart Express", layout="wide")
 
-# --- PREMIUM UI CUSTOM CSS WITH GRADIENT & GLASSMORPHISM ---
+# --- ULTRA PREMIUM UI CUSTOM CSS WITH ADVANCED SIDEBAR NAVIGATION ---
 custom_css = """
 <style>
     /* 1. Latar Belakang Utama dengan Gradasi Mewah (Soft Mint to Sky Blue) */
@@ -71,13 +71,53 @@ custom_css = """
         border-right: 3px solid #10b981 !important;
     }
     
-    /* Teks di dalam Sidebar */
+    /* Teks dan Label di dalam Sidebar */
     [data-testid="stSidebar"] h3, [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
         color: #f8fafc !important;
         font-family: 'Segoe UI', system-ui, sans-serif !important;
     }
+
+    /* 3. DESAIN KUSTOM TOMBOL MENU SIDEBAR (MENGGANTI BULATAN BIASA) */
+    [data-testid="stSidebar"] div[role="radiogroup"] {
+        gap: 10px !important;
+        padding-top: 10px !important;
+    }
     
-    /* 3. Desain Kustom Judul dan Font Utama */
+    [data-testid="stSidebar"] div[role="radiogroup"] label {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        margin-bottom: 2px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        cursor: pointer !important;
+        width: 100% !important;
+    }
+
+    /* Efek Hover: Saat Menu Disorot Kursor */
+    [data-testid="stSidebar"] div[role="radiogroup"] label:hover {
+        background: rgba(16, 185, 129, 0.12) !important;
+        border-color: rgba(16, 185, 129, 0.4) !important;
+        transform: translateX(4px);
+    }
+
+    /* Efek Aktif: Saat Menu Dipilih/Diklik */
+    [data-testid="stSidebar"] div[role="radiogroup"] label[data-checked="true"] {
+        background: linear-gradient(90deg, rgba(13, 148, 136, 0.25) 0%, rgba(16, 185, 129, 0.15) 100%) !important;
+        border-left: 5px solid #10b981 !important;
+        border-color: rgba(16, 185, 129, 0.4) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Sembunyikan lingkaran radio asli agar terlihat seperti tombol navigasi kustom */
+    [data-testid="stSidebar"] div[role="radiogroup"] label div[data-testid="stMarkdownContainer"] p::before {
+        content: "";
+    }
+    [data-testid="stSidebar"] div[role="radiogroup"] [data-testid="stWidgetRadioDot"] {
+        display: none !important;
+    }
+    
+    /* 4. Desain Kustom Judul Utama */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Segoe UI', system-ui, sans-serif !important;
         background: linear-gradient(45deg, #0f172a, #0d9488);
@@ -87,7 +127,7 @@ custom_css = """
         letter-spacing: -0.5px;
     }
     
-    /* 4. Kotak Kontainer Bergaya Glassmorphism */
+    /* 5. Kotak Kontainer Bergaya Glassmorphism */
     .clean-box {
         background: rgba(255, 255, 255, 0.85) !important;
         backdrop-filter: blur(12px);
@@ -100,7 +140,7 @@ custom_css = """
         box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08) !important;
     }
     
-    /* 5. Mengubah Tampilan Angka Statistik / Metric Card */
+    /* 6. Mengubah Tampilan Card Statistik */
     [data-testid="stMetric"] {
         background: rgba(255, 255, 255, 0.9) !important;
         border-radius: 16px !important;
@@ -122,14 +162,13 @@ custom_css = """
         font-size: 12px !important;
     }
     
-    /* 6. Desain Tombol Interaktif Premium */
+    /* 7. Desain Tombol Interaktif Premium */
     button[kind="primary"] {
         background: linear-gradient(135deg, #0d9488 0%, #115e59 100%) !important;
         color: white !important;
         border: none !important;
         border-radius: 12px !important;
         font-weight: 600 !important;
-        letter-spacing: 0.5px;
         box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3) !important;
         transition: all 0.3s ease !important;
     }
@@ -137,8 +176,20 @@ custom_css = """
         transform: translateY(-2px) scale(1.01);
         box-shadow: 0 12px 20px rgba(13, 148, 136, 0.4) !important;
     }
+
+    /* Tombol Keluar Sistem */
+    button[kind="secondary"] {
+        background: rgba(239, 68, 68, 0.1) !important;
+        color: #ef4444 !important;
+        border: 1px solid rgba(239, 68, 68, 0.2) !important;
+        border-radius: 12px !important;
+        transition: all 0.2s ease !important;
+    }
+    button[kind="secondary"]:hover {
+        background: #ef4444 !important;
+        color: white !important;
+    }
     
-    /* Input Form Modern */
     textarea, input {
         color: #0f172a !important;
         background-color: #ffffff !important;
@@ -225,26 +276,33 @@ if not st.session_state.is_logged_in:
 # HALAMAN 2: OPERASIONAL UTAMA
 # ==========================================
 else:
-    st.sidebar.markdown("<h2 style='background:linear-gradient(45deg, #10b981, #38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:22px; font-weight:800; margin-bottom:5px; margin-top:15px;'>FreshMart UI v2.0</h2>", unsafe_allow_html=True)
+    st.sidebar.markdown("<h2 style='background:linear-gradient(45deg, #10b981, #38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:22px; font-weight:800; margin-bottom:5px; margin-top:15px;'>FreshMart UI v2.5</h2>", unsafe_allow_html=True)
     st.sidebar.markdown("<p style='color:#94a3b8; font-size:12px; margin-top:0; font-weight:500;'>🟢 Sistem Siap Melayani</p>", unsafe_allow_html=True)
     st.sidebar.markdown("<hr style='margin:10px 0; border-color:#334155;'>", unsafe_allow_html=True)
     
+    # DAFTAR MENU DENGAN EMOJI BIAR MAKIN MENARIK
     menu = st.sidebar.radio(
         "PILIH MODUL OPERASIONAL:", 
-        ["Beranda Utama", "Daftar Produk Toko", "Monitor Antrean", "Tambah Pelanggan Baru", "Proses Pembayaran (Checkout)", "Riwayat Jurnal Transaksi"]
+        [
+            "🏠 Beranda Utama", 
+            "📋 Daftar Produk Toko", 
+            "🔍 Monitor Antrean", 
+            "📥 Tambah Pelanggan Baru", 
+            "💸 Proses Pembayaran (Checkout)", 
+            "🧾 Riwayat Jurnal Transaksi"
+        ]
     )
     
     st.sidebar.markdown("<hr style='margin:15px 0; border-color:#334155;'>", unsafe_allow_html=True)
-    if st.sidebar.button("🔒 Tutup Shift (Keluar)", use_container_width=True):
+    if st.sidebar.button("🔒 Tutup Shift (Keluar)", type="secondary", use_container_width=True):
         st.session_state.is_logged_in = False
         st.rerun()
 
-    # --- JALUR MENU MENU ---
-    if menu == "Beranda Utama":
+    # --- JALUR MENU OPERASIONAL ---
+    if menu == "🏠 Beranda Utama":
         st.markdown('<h1>📊 Statistik & Dasbor Utama</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color:#475569; margin-top:-10px; font-weight:500;">Ringkasan aktivitas transaksi supermarket Anda hari ini</p>', unsafe_allow_html=True)
         
-        # Hitung panjang antrean saat ini
         panjang_antrean = 0
         curr = antrean.head
         while curr:
@@ -272,19 +330,21 @@ else:
             </div>
             """, unsafe_allow_html=True)
 
-    elif menu == "Daftar Produk Toko":
+    elif menu == "📋 Daftar Produk Toko":
         st.markdown('<h1>📋 Katalog Produk Terdaftar</h1>', unsafe_allow_html=True)
         st.markdown('<div class="clean-box">', unsafe_allow_html=True)
         for k, v in st.session_state.database_produk.items():
             st.markdown(f"<div style='display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;'><span style='font-weight:600; color:#1e293b;'>📦 {k}</span><span style='font-weight:700; color:#0d9488;'>Rp {v:,}</span></div>", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    elif menu == "Monitor Antrean":
+    elif menu == "🔍 Monitor Antrean":
         st.markdown('<h1>🔍 Visualisasi Memori Node (Queue)</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color:#475569; margin-top:-10px; font-weight:500;">Status urutan objek antrean FIFO murni di dalam RAM komputer</p>', unsafe_allow_html=True)
-        st.text_area("Urutan Barisan Pelanggan (Head -> Tail):", value=antrean.dapatkan_antrean_string(), height=250, disabled=True)
+        # Bersihkan string menu dari teks visualisasi agar output rapi
+        clean_antrean = antrean.dapatkan_antrean_string()
+        st.text_area("Urutan Barisan Pelanggan (Head -> Tail):", value=clean_antrean, height=250, disabled=True)
 
-    elif menu == "Tambah Pelanggan Baru":
+    elif menu == "📥 Tambah Pelanggan Baru":
         st.markdown('<h1>📥 Registrasi Masuk Antrean</h1>', unsafe_allow_html=True)
         with st.form("form_tambah_baru"):
             st.markdown('<div style="padding:5px;"></div>', unsafe_allow_html=True)
@@ -300,10 +360,7 @@ else:
                 else:
                     st.error("Gagal! Nama dan barang tidak boleh kosong.")
 
-    # ==========================================
-    # MENU 5: PROSES CHECKOUT (VISUALISASI FIX & MEWAH)
-    # ==========================================
-    elif menu == "Proses Pembayaran (Checkout)":
+    elif menu == "💸 Proses Pembayaran (Checkout)":
         st.markdown('<h1>💸 Meja Penyelesaian Pembayaran</h1>', unsafe_allow_html=True)
         
         col_kiri, col_kanan = st.columns([1.1, 1])
@@ -340,7 +397,6 @@ else:
                                 <span class="struk-item-price">Rp {st.session_state.database_produk[b]:,}</span>
                             </div>"""
                         
-                        # Gabungkan Style Khusus dan Struktur HTML ke dalam satu String utuh
                         st.session_state.struk_terakhir = f"""
                         {html_struk_style}
                         <div class="struk-container">
@@ -369,7 +425,6 @@ else:
                             <div class="struk-footer">~ Terima Kasih Atas Kunjungan Anda ~<br>Sistem Berjalan Lancar</div>
                         </div>"""
                         
-                        # Keluarkan pelanggan terdepan (Dequeue)
                         dilayani = antrean.layani_pelanggan()
                         if dilayani:
                             st.session_state.riwayat_transaksi.append(f"Sukses: {dilayani.nama} - Total Belanja: Rp {dilayani.total_harga:,} (Lunas)")
@@ -378,12 +433,11 @@ else:
         with col_kanan:
             st.markdown("### 📄 Hasil Cetak Struk Kasir")
             if st.session_state.struk_terakhir:
-                # DIJAMIN AMAN: Merender mandiri komponen grafik HTML agar layout kertas kasirnya muncul 100% sempurna
                 st.components.v1.html(st.session_state.struk_terakhir, height=520, scrolling=True)
             else:
                 st.caption("Belum ada pencetakan nota baru pada sesi ini.")
 
-    elif menu == "Riwayat Jurnal Transaksi":
+    elif menu == "🧾 Riwayat Jurnal Transaksi":
         st.markdown('<h1>🧾 Jurnal Rekapitulasi Operasional</h1>', unsafe_allow_html=True)
         if not st.session_state.riwayat_transaksi:
             st.info("Belum ada rekapan transaksi masuk hari ini.")
