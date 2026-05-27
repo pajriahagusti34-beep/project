@@ -280,16 +280,16 @@ else:
     st.sidebar.markdown("<p style='color:#94a3b8; font-size:12px; margin-top:0; font-weight:500;'>🟢 Sistem Siap Melayani</p>", unsafe_allow_html=True)
     st.sidebar.markdown("<hr style='margin:10px 0; border-color:#334155;'>", unsafe_allow_html=True)
     
-    # DAFTAR MENU DENGAN EMOJI BIAR MAKIN MENARIK
+    # MENERAPKAN TAHAPAN TUGAS REALISTIS KASIR SUPERMARKET
     menu = st.sidebar.radio(
         "PILIH MODUL OPERASIONAL:", 
         [
-            "🏠 Beranda Utama", 
-            "📋 Daftar Produk Toko", 
-            "🔍 Monitor Antrean", 
-            "📥 Tambah Pelanggan Baru", 
-            "💸 Proses Pembayaran (Checkout)", 
-            "🧾 Riwayat Jurnal Transaksi"
+            "📢 1. Panggil Nomor Antrean", 
+            "📦 2. Cek Katalog Produk Toko", 
+            "🔍 3. Monitor Sabuk Antrean RAM", 
+            "📥 4. Input Pelanggan ke Jalur", 
+            "💸 5. Scan Barang & Input Bayar", 
+            "🧾 6. Cetak Struk & Jurnal Rekap"
         ]
     )
     
@@ -298,8 +298,8 @@ else:
         st.session_state.is_logged_in = False
         st.rerun()
 
-    # --- JALUR MENU OPERASIONAL ---
-    if menu == "🏠 Beranda Utama":
+    # --- JALUR LOGIKA OPERASIONAL YANG SUDAH DISINKRONKAN DENGAN MENU BARU ---
+    if menu == "📢 1. Panggil Nomor Antrean":
         st.markdown('<h1>📊 Statistik & Dasbor Utama</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color:#475569; margin-top:-10px; font-weight:500;">Ringkasan aktivitas transaksi supermarket Anda hari ini</p>', unsafe_allow_html=True)
         
@@ -330,21 +330,20 @@ else:
             </div>
             """, unsafe_allow_html=True)
 
-    elif menu == "📋 Daftar Produk Toko":
+    elif menu == "📦 2. Cek Katalog Produk Toko":
         st.markdown('<h1>📋 Katalog Produk Terdaftar</h1>', unsafe_allow_html=True)
         st.markdown('<div class="clean-box">', unsafe_allow_html=True)
         for k, v in st.session_state.database_produk.items():
             st.markdown(f"<div style='display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;'><span style='font-weight:600; color:#1e293b;'>📦 {k}</span><span style='font-weight:700; color:#0d9488;'>Rp {v:,}</span></div>", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    elif menu == "🔍 Monitor Antrean":
+    elif menu == "🔍 3. Monitor Sabuk Antrean RAM":
         st.markdown('<h1>🔍 Visualisasi Memori Node (Queue)</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color:#475569; margin-top:-10px; font-weight:500;">Status urutan objek antrean FIFO murni di dalam RAM komputer</p>', unsafe_allow_html=True)
-        # Bersihkan string menu dari teks visualisasi agar output rapi
         clean_antrean = antrean.dapatkan_antrean_string()
         st.text_area("Urutan Barisan Pelanggan (Head -> Tail):", value=clean_antrean, height=250, disabled=True)
 
-    elif menu == "📥 Tambah Pelanggan Baru":
+    elif menu == "📥 4. Input Pelanggan ke Jalur":
         st.markdown('<h1>📥 Registrasi Masuk Antrean</h1>', unsafe_allow_html=True)
         with st.form("form_tambah_baru"):
             st.markdown('<div style="padding:5px;"></div>', unsafe_allow_html=True)
@@ -360,7 +359,7 @@ else:
                 else:
                     st.error("Gagal! Nama dan barang tidak boleh kosong.")
 
-    elif menu == "💸 Proses Pembayaran (Checkout)":
+    elif menu == "💸 5. Scan Barang & Input Bayar":
         st.markdown('<h1>💸 Meja Penyelesaian Pembayaran</h1>', unsafe_allow_html=True)
         
         col_kiri, col_kanan = st.columns([1.1, 1])
@@ -437,7 +436,7 @@ else:
             else:
                 st.caption("Belum ada pencetakan nota baru pada sesi ini.")
 
-    elif menu == "🧾 Riwayat Jurnal Transaksi":
+    elif menu == "6. Cetak Struk & Jurnal Rekap":
         st.markdown('<h1>🧾 Jurnal Rekapitulasi Operasional</h1>', unsafe_allow_html=True)
         if not st.session_state.riwayat_transaksi:
             st.info("Belum ada rekapan transaksi masuk hari ini.")
