@@ -107,6 +107,7 @@ custom_css = """
         display: none !important;
     }
     
+    /* Global Heading Style */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Segoe UI', system-ui, sans-serif !important;
         background: linear-gradient(45deg, #0f172a, #0d9488);
@@ -114,6 +115,15 @@ custom_css = """
         -webkit-text-fill-color: transparent;
         font-weight: 800 !important;
         letter-spacing: -0.5px;
+    }
+    
+    /* PERBAIKAN UTAMA: Memaksa teks di dalam st.metric agar berwarna hitam solid & tidak transparan */
+    [data-testid="stMetricValue"] div {
+        -webkit-text-fill-color: #0f172a !important;
+        color: #0f172a !important;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #475569 !important;
     }
     
     .clean-box {
@@ -227,15 +237,15 @@ if not st.session_state.is_logged_in:
     with col_m:
         st.markdown('<div style="text-align:center; margin-top:80px; margin-bottom: 10px;"><h1>✨ FreshMart Express</h1><p style="color:#475569; font-size:14px; font-weight:500;">Kasir Berbasis Antrean Dinamis (FIFO)</p></div>', unsafe_allow_html=True)
         st.markdown('<div class="clean-box">', unsafe_allow_html=True)
-        st.markdown('<h4 style="margin-top:0; margin-bottom:15px; font-size:16px; color:#0f172a;">Otorisasi Akses Pegawai</h4>', unsafe_allow_html=True)
+        st.markdown('<h4 style="margin-top:0; margin-bottom:15px; font-size:16px; color:#0f172a;-webkit-text-fill-color:#0f172a !important;">Otorisasi Akses Pegawai</h4>', unsafe_allow_html=True)
         username = st.text_input("Username Kasir:")
         password = st.text_input("Password Pengaman:", type="password")
         if st.button("Buka Akses Sistem", type="primary", use_container_width=True):
-            if username == "admin" and password == "123":
+            if username == "admin" and password == "2311":
                 st.session_state.is_logged_in = True
                 st.rerun()
             else:
-                st.error("Kredensial salah! Gunakan admin / 123.")
+                st.error("Kredensial salah! Gunakan admin / 2311.")
         st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
@@ -283,10 +293,11 @@ else:
             st.info("Kondisi Jalur Kasir Aman. Tidak ada antrean standby.")
         else:
             p_depan = antrean.head
+            # PERBAIKAN CSS DI SINI: Dipaksa warna gelap solid agar nama langsung kelihatan
             st.markdown(f"""
             <div class="clean-box">
                 <p style="margin:0; font-size:12px; color:#0d9488; font-weight:bold; text-transform:uppercase;">Sedang Melakukan Scan Barang</p>
-                <h3 style="margin:5px 0 10px 0; font-size:24px; color:#0f172a !important; background:none; -webkit-text-fill-color:initial;">{p_depan.nama}</h3>
+                <h3 style="margin:5px 0 10px 0; font-size:26px; color:#0f172a !important; background:none !important; -webkit-text-fill-color:#0f172a !important;">{p_depan.nama}</h3>
                 <p style="margin:0; font-size:14px; color:#475569;">Membawa total belanjaan sebanyak <b>{len(p_depan.list_belanjaan)} jenis barang</b> dengan estimasi tagihan <b>Rp {p_depan.total_harga:,}</b>.</p>
             </div>
             """, unsafe_allow_html=True)
@@ -327,13 +338,15 @@ else:
             st.info("Meja kasir siap. Tidak ada antrean pelanggan yang menunggu.")
         else:
             pelanggan_depan = antrean.head
-            st.markdown(f"### Pembayaran Atas Nama: `{pelanggan_depan.nama}`")
+            # PERBAIKAN CSS DI SINI: Dipaksa warna gelap solid agar nama pada judul pembayaran langsung kelihatan
+            st.markdown(f"<h3 style='background:none !important; -webkit-text-fill-color:#0f172a !important; color:#0f172a !important; margin-bottom:15px;'>Pembayaran Atas Nama: <span style='color:#0d9488; -webkit-text-fill-color:#0d9488 !important;'>{pelanggan_depan.nama}</span></h3>", unsafe_allow_html=True)
+            
             st.markdown('<div class="clean-box">', unsafe_allow_html=True)
             for b in pelanggan_depan.list_belanjaan:
                 st.markdown(f"<div style='font-size:14px; margin-bottom:4px; color:#475569;'>• {b} (Rp {st.session_state.database_produk[b]:,})</div>", unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
-            st.markdown(f"<h2>Total Tagihan: <span style='color:#0d9488;'>Rp {pelanggan_depan.total_harga:,}</span></h2>", unsafe_allow_html=True)
+            st.markdown(f"<h2 style='background:none !important; -webkit-text-fill-color:#0f172a !important; color:#0f172a !important;'>Total Tagihan: <span style='color:#0d9488; -webkit-text-fill-color:#0d9488 !important;'>Rp {pelanggan_depan.total_harga:,}</span></h2>", unsafe_allow_html=True)
             uang_bayar = st.number_input("Masukkan Jumlah Nominal Uang Tunai (Rp):", min_value=0, step=1000)
             
             if st.button("Finalisasi Pembayaran & Cetak Nota", type="primary", use_container_width=True):
